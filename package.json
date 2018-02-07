@@ -4,5 +4,11 @@
   "description": "A home for all your branches",
   "repository": "git@github.com:jessepinho/treehouse.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.11.1"
+  }
 }
