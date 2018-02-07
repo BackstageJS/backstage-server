@@ -1,0 +1,8 @@
+{
+  "name": "treehouse",
+  "version": "0.0.0",
+  "description": "A home for all your branches",
+  "repository": "git@github.com:jessepinho/treehouse.git",
+  "author": "Jesse Pinho <jesse@jessepinho.com>",
+  "license": "MIT"
+}
