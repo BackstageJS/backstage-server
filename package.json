@@ -8,7 +8,8 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "start:watch": "nodemon",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
