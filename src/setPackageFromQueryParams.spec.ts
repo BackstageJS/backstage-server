@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-import { setPackageCookies } from './setPackageCookies'
+import { setPackageFromQueryParams } from './setPackageFromQueryParams'
 
-describe('setPackageCookies', () => {
+describe('setPackageFromQueryParams', () => {
   let res: Response
 
   beforeEach(() => res = httpMocks.createResponse())
@@ -12,7 +12,7 @@ describe('setPackageCookies', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ query: {} })
       const next = jest.fn()
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -22,7 +22,7 @@ describe('setPackageCookies', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ query: { app: 'foo' } })
       const next = jest.fn()
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -32,7 +32,7 @@ describe('setPackageCookies', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ query: { key: 'foo' } })
       const next = jest.fn()
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -50,23 +50,23 @@ describe('setPackageCookies', () => {
     })
 
     it('does not call `next()`', () => {
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
       expect(next).not.toHaveBeenCalled()
     })
 
     it('sets the `app` cookie', () => {
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
       expect(res.cookie).toHaveBeenCalledWith('app', 'appName')
     })
 
     it('sets the `key` cookie', () => {
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
       expect(res.cookie).toHaveBeenCalledWith('key', 'keyName')
     })
 
     it('redirects the user to the requested pathh', () => {
       req.path = '/my/file'
-      setPackageCookies(req, res, next)
+      setPackageFromQueryParams(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/my/file')
     })
   })
