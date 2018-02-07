@@ -5,6 +5,10 @@
   "repository": "git@github.com:jessepinho/treehouse.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/app.ts",
+    "start:watch": "nodemon"
+  },
   "dependencies": {
     "express": "^4.16.2",
     "ts-node": "^4.1.0"
