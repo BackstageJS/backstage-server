@@ -43,7 +43,7 @@ describe('getStaticFile', () => {
 
     beforeEach(() => {
       req = httpMocks.createRequest({
-        cookies: { app: 'foo', key: 'foo' },
+        cookies: { app: 'app', key: 'key' },
         path: '/my/file',
       })
 
@@ -60,8 +60,24 @@ describe('getStaticFile', () => {
 
     it('calls `res.sendFile`', () => {
       getStaticFile(req, res, jest.fn())
-
       expect(res.sendFile).toHaveBeenCalled()
+    })
+
+    describe('the `res.sendFile` call', () => {
+      it('is relative to the files directory', () => {
+        getStaticFile(req, res, jest.fn())
+        expect(res.sendFile).toHaveBeenCalledWith(expect.stringMatching(/(.*\/)?files\//))
+      })
+
+      it('includes the path requested', () => {
+        getStaticFile(req, res, jest.fn())
+        expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining(req.path))
+      })
+
+      it('includes the app and key requested', () => {
+        getStaticFile(req, res, jest.fn())
+        expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining('app/key'))
+      })
     })
   })
 })

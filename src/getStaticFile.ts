@@ -2,8 +2,11 @@ import { RequestHandler } from 'express'
 import * as path from 'path'
 
 export const getStaticFile: RequestHandler = (req, res, next) => {
-  if (req.cookies.app && req.cookies.key) {
-    res.sendFile(req.path)
+  const { app, key } = req.cookies
+
+  if (app && key) {
+    const rootDir = path.join(__dirname, '../files')
+    res.sendFile(`${rootDir}/${app}/${key}${req.path}`)
   } else {
     next()
   }
