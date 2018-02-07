@@ -5,7 +5,7 @@ export const setPackageCookies: RequestHandler = (req, res, next) => {
   if (app && key) {
     res.cookie('app', app)
     res.cookie('key', key)
-    res.redirect('/')
+    res.redirect(req.path)
   } else {
     next()
   }

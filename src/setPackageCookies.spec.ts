@@ -64,9 +64,10 @@ describe('setPackageCookies', () => {
       expect(res.cookie).toHaveBeenCalledWith('key', 'keyName')
     })
 
-    it('forwards the user to `/`', () => {
+    it('redirects the user to the requested pathh', () => {
+      req.path = '/my/file'
       setPackageCookies(req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith('/')
+      expect(res.redirect).toHaveBeenCalledWith('/my/file')
     })
   })
 })
