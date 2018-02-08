@@ -27,6 +27,17 @@ describe('fileSystem', () => {
   })
 
   describe('PUT requests', () => {
+    describe('when the path matches /:app/:key', () => {
+      it('calls `putFile()`', () => {
+        const req = httpMocks.createRequest({ method: 'PUT', path: '/myApp/myKey' })
+        const res = httpMocks.createResponse()
+        const next = jest.fn()
+        fileSystem('rootDir')(req, res, next)
+
+        expect(mockPutHandler).toHaveBeenCalled()
+      })
+    })
+
     describe("when the path doesn't match /:app/:key", () => {
       it('does not call `putFile()`', () => {
         const req = httpMocks.createRequest({ method: 'PUT', path: '/foo' })
