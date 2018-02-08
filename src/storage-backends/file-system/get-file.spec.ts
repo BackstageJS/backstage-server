@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-import { fileSystem } from './file-system'
+import { getFile } from './get-file'
 
-describe('fileSystem', () => {
+describe('getFile', () => {
   describe('when the app/key cookies are not set', () => {
     it('calls `next()`', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: {} })
       const res = httpMocks.createResponse()
-      fileSystem('rootDir')(req, res, next)
+      getFile('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -20,7 +20,7 @@ describe('fileSystem', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: { app: 'foo' } })
       const res = httpMocks.createResponse()
-      fileSystem('rootDir')(req, res, next)
+      getFile('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -31,7 +31,7 @@ describe('fileSystem', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: { key: 'foo' } })
       const res = httpMocks.createResponse()
-      fileSystem('rootDir')(req, res, next)
+      getFile('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -53,29 +53,29 @@ describe('fileSystem', () => {
 
     it('does not call `next()`', () => {
       const next = jest.fn()
-      fileSystem('rootDir')(req, res, next)
+      getFile('rootDir')(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
     })
 
     it('calls `res.sendFile`', () => {
-      fileSystem('rootDir')(req, res, jest.fn())
+      getFile('rootDir')(req, res, jest.fn())
       expect(res.sendFile).toHaveBeenCalled()
     })
 
     describe('the `res.sendFile` call', () => {
       it('is relative to the passed-in root directory', () => {
-        fileSystem('rootDir')(req, res, jest.fn())
+        getFile('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringMatching(/(.*\/)?rootDir\//))
       })
 
       it('includes the path requested', () => {
-        fileSystem('rootDir')(req, res, jest.fn())
+        getFile('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining(req.path))
       })
 
       it('includes the app and key requested', () => {
-        fileSystem('rootDir')(req, res, jest.fn())
+        getFile('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining('app/key'))
       })
     })

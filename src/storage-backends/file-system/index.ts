@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 
 import { StorageBackend } from '../../app'
-import { fileSystem as getFile } from './file-system'
+import { getFile } from './get-file'
 
 export const fileSystem: (rootDir: string) => StorageBackend = rootDir => (req, res, next) => {
   if (req.method === 'GET') {

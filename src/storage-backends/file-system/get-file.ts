@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { StorageBackend } from '../../app'
 
-export const fileSystem: (rootDir: string) => StorageBackend = rootDir => (req, res, next) => {
+export const getFile: (rootDir: string) => StorageBackend = rootDir => (req, res, next) => {
   const { app, key } = req.cookies
 
   if (app && key) {
