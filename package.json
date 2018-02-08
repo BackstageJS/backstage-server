@@ -5,7 +5,13 @@
   "repository": "git@github.com:jessepinho/treehouse.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
   "license": "MIT",
+  "main": "dist/app.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepublish": "tsc",
     "start": "ts-node src/app.ts",
     "start:watch": "nodemon",
     "test": "jest",
