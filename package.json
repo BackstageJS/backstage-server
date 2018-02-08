@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "prepublish": "tsc",
     "start": "ts-node src/app.ts",
     "start:watch": "nodemon",
