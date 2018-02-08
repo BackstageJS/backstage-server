@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-import { getStaticFile } from './getStaticFile'
+import { fileSystem } from './file-system'
 
-describe('getStaticFile', () => {
+describe('fileSystem', () => {
   describe('when the app/key cookies are not set', () => {
     it('calls `next()`', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: {} })
       const res = httpMocks.createResponse()
-      getStaticFile('rootDir')(req, res, next)
+      fileSystem('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -20,7 +20,7 @@ describe('getStaticFile', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: { app: 'foo' } })
       const res = httpMocks.createResponse()
-      getStaticFile('rootDir')(req, res, next)
+      fileSystem('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -31,7 +31,7 @@ describe('getStaticFile', () => {
       const next = jest.fn()
       const req = httpMocks.createRequest({ cookies: { key: 'foo' } })
       const res = httpMocks.createResponse()
-      getStaticFile('rootDir')(req, res, next)
+      fileSystem('rootDir')(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -53,29 +53,29 @@ describe('getStaticFile', () => {
 
     it('does not call `next()`', () => {
       const next = jest.fn()
-      getStaticFile('rootDir')(req, res, next)
+      fileSystem('rootDir')(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
     })
 
     it('calls `res.sendFile`', () => {
-      getStaticFile('rootDir')(req, res, jest.fn())
+      fileSystem('rootDir')(req, res, jest.fn())
       expect(res.sendFile).toHaveBeenCalled()
     })
 
     describe('the `res.sendFile` call', () => {
       it('is relative to the passed-in root directory', () => {
-        getStaticFile('rootDir')(req, res, jest.fn())
+        fileSystem('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringMatching(/(.*\/)?rootDir\//))
       })
 
       it('includes the path requested', () => {
-        getStaticFile('rootDir')(req, res, jest.fn())
+        fileSystem('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining(req.path))
       })
 
       it('includes the app and key requested', () => {
-        getStaticFile('rootDir')(req, res, jest.fn())
+        fileSystem('rootDir')(req, res, jest.fn())
         expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining('app/key'))
       })
     })
