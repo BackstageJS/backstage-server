@@ -5,6 +5,8 @@
     ],
     "jsRules": {},
     "rules": {
+        "arrow-parens": false,
+        "interface-name": false,
         "quotemark": [
             true,
             "single",
