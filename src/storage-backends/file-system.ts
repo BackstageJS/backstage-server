@@ -1,6 +1,4 @@
 import { RequestHandler } from 'express'
-import * as path from 'path'
-
 import { StorageBackend } from '../app'
 
 export const fileSystem: (rootDir: string) => StorageBackend = rootDir => (req, res, next) => {
