@@ -1,7 +1,10 @@
 import * as httpMocks from 'node-mocks-http'
 
-const mockGetFile = jest.fn(() => () => null)
-const mockPutFile = jest.fn(() => () => null)
+let mockGetHandler: () => void
+let mockPutHandler: () => void
+
+const mockGetFile = jest.fn(() => mockGetHandler)
+const mockPutFile = jest.fn(() => mockPutHandler)
 
 jest.mock('./get-file.ts', () => ({ getFile: mockGetFile }))
 jest.mock('./put-file.ts', () => ({ putFile: mockPutFile }))
@@ -10,8 +13,8 @@ import { fileSystem } from './index'
 
 describe('fileSystem', () => {
   beforeEach(() => {
-    mockGetFile.mockClear()
-    mockPutFile.mockClear()
+    mockGetHandler = jest.fn()
+    mockPutHandler = jest.fn()
   })
 
   it('calls `getFile()` for a GET request', () => {
@@ -20,7 +23,7 @@ describe('fileSystem', () => {
     const next = jest.fn()
     fileSystem('rootDir')(req, res, next)
 
-    expect(mockGetFile).toHaveBeenCalled()
+    expect(mockGetHandler).toHaveBeenCalled()
   })
 
   describe('PUT requests', () => {
@@ -40,7 +43,7 @@ describe('fileSystem', () => {
         const next = jest.fn()
         fileSystem('rootDir')(req, res, next)
 
-        expect(mockPutFile).not.toHaveBeenCalled()
+        expect(mockPutHandler).not.toHaveBeenCalled()
       })
     })
   })
