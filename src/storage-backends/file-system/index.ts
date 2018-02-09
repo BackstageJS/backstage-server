@@ -1,13 +1,15 @@
 import * as express from 'express'
+import * as multer from 'multer'
 
 import { StorageBackend } from '../../app'
 import { getFile } from './get-file'
 import { postFile } from './post-file'
 
 export const fileSystem: (rootDir: string) => StorageBackend = rootDir => {
-  const router: express.Router = express.Router()
-  router.get('/*', getFile(rootDir))
-  router.post('/:app/:key', postFile(rootDir))
+  const upload = multer({ dest: rootDir })
+  const app: express.Express = express()
+  app.get('/*', getFile(rootDir))
+  app.post('/:app/:key', upload.single('package'), postFile(rootDir))
 
-  return router
+  return app
 }
