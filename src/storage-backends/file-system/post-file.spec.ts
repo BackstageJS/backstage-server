@@ -5,13 +5,13 @@ import * as httpMocks from 'node-mocks-http'
 const mockFS = { writeFile: jest.fn() }
 jest.mock('fs', () => mockFS)
 
-import { putFile } from './put-file'
+import { postFile } from './post-file'
 
-describe('putFile', () => {
+describe('postFile', () => {
   let handler: RequestHandler
 
   beforeEach(() => {
-    handler = putFile('rootDir')
+    handler = postFile('rootDir')
   })
 
   it('saves the uploaded file into the specified root directory', () => {
