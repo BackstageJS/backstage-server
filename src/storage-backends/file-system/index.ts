@@ -5,7 +5,7 @@ import { getFile } from './get-file'
 
 export const fileSystem: (rootDir: string) => StorageBackend = rootDir => {
   const router: express.Router = express.Router()
-  router.get('/', getFile(rootDir))
+  router.get('/*', getFile(rootDir))
 
   return router
 }

@@ -18,12 +18,12 @@ describe('fileSystem', () => {
   })
 
   it('calls `getFile()` for a GET request', () => {
-    const req = httpMocks.createRequest({ method: 'GET' })
+    const req = httpMocks.createRequest({ method: 'GET', path: '/filename.txt' })
     const res = httpMocks.createResponse()
     const next = jest.fn()
     fileSystem('rootDir')(req, res, next)
 
-    expect(mockGetHandler).toHaveBeenCalled()
+    expect(mockGetHandler).toHaveBeenCalledWith(req, res, expect.any(Function))
   })
 
   describe('PUT requests', () => {
