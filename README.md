@@ -28,3 +28,9 @@ getApp(fileSystem(path.join(__dirname, '../files'))).listen(3000)
 ```
 
 Note that `getApp` returns an `Express` object, which means you can call `.listen()` on it and start your server.
+
+To make a test upload, run the following command:
+
+```
+$ curl -X POST -F package=@"$HOME/path/to/your/file.jpg" http://localhost:3000/APP_NAME/KEY_NAME -v
+```
