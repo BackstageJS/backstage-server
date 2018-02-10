@@ -3,11 +3,15 @@ import * as httpMocks from 'node-mocks-http'
 let mockGetHandler: () => void
 let mockPostHandler: () => void
 
-const mockGetFile = jest.fn(() => mockGetHandler)
-const mockPostFile = jest.fn(() => mockPostHandler)
+const mockGetFile = { getFile: () => mockGetHandler }
+const mockPostFile = { postFile: () => mockPostHandler }
+jest.mock('./get-file.ts', () => mockGetFile)
+jest.mock('./post-file.ts', () => mockPostFile)
 
-jest.mock('./get-file.ts', () => ({ getFile: mockGetFile }))
-jest.mock('./post-file.ts', () => ({ postFile: mockPostFile }))
+const mockAccess = (path: string, callback: (error?: any) => void) => callback('error')
+const mockMkdir = jest.fn()
+const mockFS = { access: mockAccess, mkdir: mockMkdir, mkdirSync: () => null }
+jest.mock('fs', () => mockFS)
 
 import { fileSystem } from './index'
 
@@ -17,35 +21,42 @@ describe('fileSystem', () => {
     mockPostHandler = jest.fn()
   })
 
-  it('calls `getFile()` for a GET request', () => {
-    const req = httpMocks.createRequest({ method: 'GET', path: '/filename.txt' })
-    const res = httpMocks.createResponse()
-    const next = jest.fn()
-    fileSystem('rootDir')(req, res, next)
-
-    expect(mockGetHandler).toHaveBeenCalledWith(req, res, expect.any(Function))
+  it("creates a `<rootDir>/tmp` directory if it doesn't exist yet", () => {
+    fileSystem('rootDir')
+    expect(mockMkdir).toHaveBeenCalledWith('rootDir/tmp', expect.any(Function))
   })
 
-  describe('POST requests', () => {
-    describe('when the path matches /:app/:key', () => {
-      it('calls `postFile()`', () => {
-        const req = httpMocks.createRequest({ method: 'POST', path: '/myApp/myKey' })
-        const res = httpMocks.createResponse()
-        const next = jest.fn()
-        fileSystem('rootDir')(req, res, next)
+  describe('requests', () => {
+    it('calls `getFile()` for a GET request', () => {
+      const req = httpMocks.createRequest({ method: 'GET', path: '/filename.txt' })
+      const res = httpMocks.createResponse()
+      const next = jest.fn()
+      fileSystem('rootDir')(req, res, next)
 
-        expect(mockPostHandler).toHaveBeenCalled()
-      })
+      expect(mockGetHandler).toHaveBeenCalledWith(req, res, expect.any(Function))
     })
 
-    describe("when the path doesn't match /:app/:key", () => {
-      it('does not call `postFile()`', () => {
-        const req = httpMocks.createRequest({ method: 'POST', path: '/foo' })
-        const res = httpMocks.createResponse()
-        const next = jest.fn()
-        fileSystem('rootDir')(req, res, next)
+    describe('POST requests', () => {
+      describe('when the path matches /:app/:key', () => {
+        it('calls `postFile()`', () => {
+          const req = httpMocks.createRequest({ method: 'POST', path: '/myApp/myKey' })
+          const res = httpMocks.createResponse()
+          const next = jest.fn()
+          fileSystem('rootDir')(req, res, next)
 
-        expect(mockPostHandler).not.toHaveBeenCalled()
+          expect(mockPostHandler).toHaveBeenCalled()
+        })
+      })
+
+      describe("when the path doesn't match /:app/:key", () => {
+        it('does not call `postFile()`', () => {
+          const req = httpMocks.createRequest({ method: 'POST', path: '/foo' })
+          const res = httpMocks.createResponse()
+          const next = jest.fn()
+          fileSystem('rootDir')(req, res, next)
+
+          expect(mockPostHandler).not.toHaveBeenCalled()
+        })
       })
     })
   })
