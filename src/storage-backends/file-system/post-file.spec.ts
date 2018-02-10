@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { RequestHandler } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-const mockFS = { rename: jest.fn() }
+const mockFS = { mkdir: jest.fn(), rename: jest.fn() }
 jest.mock('fs', () => mockFS)
 
 const mockTar = { extract: jest.fn() }
@@ -43,6 +43,7 @@ describe('postFile', () => {
     handler = postFile(rootDir)
     end = jest.fn()
     status = jest.fn(() => ({ end }))
+    mockFS.mkdir.mockClear()
     mockFS.rename.mockClear()
     mockTar.extract.mockClear()
   })
@@ -54,6 +55,14 @@ describe('postFile', () => {
     handler(req, res, jest.fn())
 
     expect(status).toHaveBeenCalledWith(201)
+  })
+
+  it('creates a directory for the key', () => {
+    const req = createRequest(rootDir)
+    const res = httpMocks.createResponse()
+    handler(req, res, jest.fn())
+
+    expect(mockFS.mkdir).toHaveBeenCalledWith(`${rootDir}/myApp/someKey`, expect.any(Function))
   })
 
   describe("when the uploaded file's original name ends in `.tar.gz`", () => {
@@ -81,7 +90,6 @@ describe('postFile', () => {
     it('is moved to `<rootDir>/<appName>/<keyName>/<filename>`', () => {
       const req = createRequest(rootDir)
       const res = httpMocks.createResponse()
-      res.status = status
       handler(req, res, jest.fn())
       const newPath = '/var/www/files/myApp/someKey/myFileName.txt'
 
