@@ -2,24 +2,25 @@ import { Request, Response } from 'express'
 import { RequestHandler } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-const mockFS = { writeFile: jest.fn() }
-jest.mock('fs', () => mockFS)
-
 import { postFile } from './post-file'
 
 describe('postFile', () => {
   let handler: RequestHandler
+  let end: () => void
+  let status: (code: number) => Response
 
   beforeEach(() => {
     handler = postFile('rootDir')
+    end = jest.fn()
+    status = jest.fn(() => ({ end }))
   })
 
-  it('saves the uploaded file into the specified root directory', () => {
-    const req = httpMocks.createRequest({ body: { file: 'text' } })
+  it('sends a 201 Created', () => {
+    const req = httpMocks.createRequest()
     const res = httpMocks.createResponse()
-    const next = jest.fn()
-    handler(req, res, next)
+    res.status = status
+    handler(req, res, jest.fn())
 
-    expect(mockFS.writeFile).toHaveBeenCalledWith('rootDir/payload', 'text', expect.any(Function))
+    expect(status).toHaveBeenCalledWith(201)
   })
 })
