@@ -56,6 +56,7 @@
   },
   "exclude": [
     "**/*.spec.ts",
-    "dist"
+    "dist",
+    "node_modules"
   ]
 }
