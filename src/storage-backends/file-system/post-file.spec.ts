@@ -5,6 +5,9 @@ import * as httpMocks from 'node-mocks-http'
 const mockFS = { rename: jest.fn() }
 jest.mock('fs', () => mockFS)
 
+const mockTar = { extract: jest.fn() }
+jest.mock('tar', () => mockTar)
+
 import { postFile } from './post-file'
 
 const createRequest = (rootDir: string): Request => {
@@ -40,6 +43,8 @@ describe('postFile', () => {
     handler = postFile(rootDir)
     end = jest.fn()
     status = jest.fn(() => ({ end }))
+    mockFS.rename.mockClear()
+    mockTar.extract.mockClear()
   })
 
   it('sends a 201 Created', () => {
@@ -51,8 +56,29 @@ describe('postFile', () => {
     expect(status).toHaveBeenCalledWith(201)
   })
 
-  describe('the uploaded file', () => {
-    it('is moved to <rootDir>/<appName>/<keyName>/<filename>', () => {
+  describe("when the uploaded file's original name ends in `.tar.gz`", () => {
+    it('is extracted to `<rootDir>/<appName>/<keyName>/<filename>`', () => {
+      const req = createRequest(rootDir)
+      req.file.originalname = 'package.tar.gz'
+      const res = httpMocks.createResponse()
+      handler(req, res, jest.fn())
+
+      const extractionPath = '/var/www/files/myApp/someKey'
+      expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, C: extractionPath })
+    })
+
+    it('is not moved', () => {
+      const req = createRequest(rootDir)
+      req.file.originalname = 'package.tar.gz'
+      const res = httpMocks.createResponse()
+      handler(req, res, jest.fn())
+
+      expect(mockFS.rename).not.toHaveBeenCalled()
+    })
+  })
+
+  describe("when the uploaded file's original name doesn't end in `.tar.gz`", () => {
+    it('is moved to `<rootDir>/<appName>/<keyName>/<filename>`', () => {
       const req = createRequest(rootDir)
       const res = httpMocks.createResponse()
       res.status = status
