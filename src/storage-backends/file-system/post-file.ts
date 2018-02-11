@@ -8,7 +8,7 @@ export const postFile: (rootDir: string) => RequestHandler = rootDir => (req, re
   mkdir(targetDirectory, console.error)
 
   if (req.file.originalname.match(/\.tar\.gz$/)) {
-    tar.extract({ file: req.file.path, C: targetDirectory })
+    tar.extract({ cwd: targetDirectory, file: req.file.path })
   } else {
     rename(
       req.file.path,

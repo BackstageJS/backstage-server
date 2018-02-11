@@ -73,7 +73,7 @@ describe('postFile', () => {
       handler(req, res, jest.fn())
 
       const extractionPath = '/var/www/files/myApp/someKey'
-      expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, C: extractionPath })
+      expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
     })
 
     it('is not moved', () => {
