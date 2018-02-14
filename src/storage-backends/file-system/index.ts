@@ -9,7 +9,7 @@ import { postFile } from './post-file'
 export const fileSystem: (rootDir: string) => StorageBackend = rootDir => {
   fs.access(rootDir, (error: any) => {
     if (error) {
-      fs.mkdir(rootDir + '/tmp', console.error)
+      fs.mkdir(rootDir + '/tmp', () => null)
     }
   })
   const upload = multer({ dest: `${rootDir}/tmp` })
