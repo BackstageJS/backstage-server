@@ -65,35 +65,13 @@ describe('postFile', () => {
     expect(mockFS.mkdir).toHaveBeenCalledWith(`${rootDir}/myApp/someKey`, expect.any(Function))
   })
 
-  describe("when the uploaded file's original name ends in `.tar.gz`", () => {
-    it('is extracted to `<rootDir>/<appName>/<keyName>/<filename>`', () => {
-      const req = createRequest(rootDir)
-      req.file.originalname = 'package.tar.gz'
-      const res = httpMocks.createResponse()
-      handler(req, res, jest.fn())
+  it('extracts the archive to `<rootDir>/<appName>/<keyName>`', () => {
+    const req = createRequest(rootDir)
+    req.file.originalname = 'package.tar.gz'
+    const res = httpMocks.createResponse()
+    handler(req, res, jest.fn())
 
-      const extractionPath = '/var/www/files/myApp/someKey'
-      expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
-    })
-
-    it('is not moved', () => {
-      const req = createRequest(rootDir)
-      req.file.originalname = 'package.tar.gz'
-      const res = httpMocks.createResponse()
-      handler(req, res, jest.fn())
-
-      expect(mockFS.rename).not.toHaveBeenCalled()
-    })
-  })
-
-  describe("when the uploaded file's original name doesn't end in `.tar.gz`", () => {
-    it('is moved to `<rootDir>/<appName>/<keyName>/<filename>`', () => {
-      const req = createRequest(rootDir)
-      const res = httpMocks.createResponse()
-      handler(req, res, jest.fn())
-      const newPath = '/var/www/files/myApp/someKey/myFileName.txt'
-
-      expect(mockFS.rename).toHaveBeenCalledWith(req.file.path, newPath, expect.any(Function))
-    })
+    const extractionPath = '/var/www/files/myApp/someKey'
+    expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
   })
 })
