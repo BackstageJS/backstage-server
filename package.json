@@ -1,8 +1,8 @@
 {
-  "name": "treehouse",
+  "name": "backstage-server",
   "version": "0.0.0",
-  "description": "A home for all your branches",
-  "repository": "git@github.com:jessepinho/treehouse.git",
+  "description": "Simple hosting for multiple versions of your static sites.",
+  "repository": "git@github.com:jessepinho/backstage-server.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
   "license": "MIT",
   "main": "dist/app.js",

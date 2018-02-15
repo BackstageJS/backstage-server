@@ -1,28 +1,28 @@
-# Treehouse
+# Backstage Server
 
-Treehouse is a wonderfully easy way to preview particular versions of your static site for QA purposes.
+Backstage Server is a wonderfully easy way to preview particular versions of your static site for QA purposes.
 
 ## Usage
 
-Create a fresh new repo, and install Treehouse:
+Create a fresh new repo, and install Backstage Server:
 
 ```
-$ npm install --save treehouse
+$ npm install --save backstage-server
 ```
 
 or
 
 ```
-$ yarn add treehouse
+$ yarn add backstage-server
 ```
 
-In your `index.js` file, import `getApp` from Treehouse, as well as the storage backend you want to use. Then configure your server:
+In your `index.js` file, import `getApp` from Backstage Server, as well as the storage backend you want to use. Then configure your server:
 
 ```JavaScript
 // index.js
 import path from 'path'
-import { getApp } from 'treehouse'
-import { fileSystem } from 'treehouse/dist/storage-backends/file-system'
+import { getApp } from 'backstage-server'
+import { fileSystem } from 'backstage-server/dist/storage-backends/file-system'
 
 getApp(fileSystem(path.join(__dirname, '../files'))).listen(3000)
 ```
