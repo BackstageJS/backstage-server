@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { RequestHandler } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-const mockFS = { mkdir: jest.fn(), rename: jest.fn() }
+const mockFS = { mkdir: jest.fn(), rename: jest.fn(), rmdir: jest.fn() }
 jest.mock('fs', () => mockFS)
 
 const mockTar = { extract: jest.fn() }
@@ -45,6 +45,7 @@ describe('postFile', () => {
     status = jest.fn(() => ({ end }))
     mockFS.mkdir.mockClear()
     mockFS.rename.mockClear()
+    mockFS.rmdir.mockClear()
     mockTar.extract.mockClear()
   })
 
@@ -55,6 +56,14 @@ describe('postFile', () => {
     handler(req, res, jest.fn())
 
     expect(status).toHaveBeenCalledWith(201)
+  })
+
+  it('deletes an existing directory for the key', () => {
+    const req = createRequest(rootDir)
+    const res = httpMocks.createResponse()
+    handler(req, res, jest.fn())
+
+    expect(mockFS.rmdir).toHaveBeenCalledWith(`${rootDir}/myApp/someKey`, expect.any(Function))
   })
 
   it('creates a directory for the key', () => {
