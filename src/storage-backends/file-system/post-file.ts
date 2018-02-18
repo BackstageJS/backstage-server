@@ -5,7 +5,7 @@ import * as tar from 'tar'
 export const postFile: (rootDir: string) => RequestHandler = rootDir => (req, res) => {
   const app = req.params.app.replace(/\W/g, '-')
   const key = req.params.key.replace(/\W/g, '-')
-  const targetDirectory = `${rootDir}/${app}/${key}`
+  const targetDirectory = `${rootDir}/packages/${app}/${key}`
 
   rmdir(targetDirectory, () => null)
   mkdir(targetDirectory, () => null)

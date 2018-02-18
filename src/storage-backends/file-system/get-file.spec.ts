@@ -58,26 +58,9 @@ describe('getFile', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('calls `res.sendFile`', () => {
+    it('calls `res.sendFile` with the correct directory', () => {
       getFile('rootDir')(req, res, jest.fn())
-      expect(res.sendFile).toHaveBeenCalled()
-    })
-
-    describe('the `res.sendFile` call', () => {
-      it('is relative to the passed-in root directory', () => {
-        getFile('rootDir')(req, res, jest.fn())
-        expect(res.sendFile).toHaveBeenCalledWith(expect.stringMatching(/(.*\/)?rootDir\//))
-      })
-
-      it('includes the path requested', () => {
-        getFile('rootDir')(req, res, jest.fn())
-        expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining(req.path))
-      })
-
-      it('includes the app and key requested', () => {
-        getFile('rootDir')(req, res, jest.fn())
-        expect(res.sendFile).toHaveBeenCalledWith(expect.stringContaining('app/key'))
-      })
+      expect(res.sendFile).toHaveBeenCalledWith(expect.stringMatching(/^rootDir\/packages\/app\/key/))
     })
   })
 })

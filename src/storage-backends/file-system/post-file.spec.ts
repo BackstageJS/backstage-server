@@ -75,7 +75,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.rmdir).toHaveBeenCalledWith(`${rootDir}/myApp/someKey`, expect.any(Function))
+    expect(mockFS.rmdir).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`, expect.any(Function))
   })
 
   it('creates a directory for the key', () => {
@@ -83,15 +83,15 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.mkdir).toHaveBeenCalledWith(`${rootDir}/myApp/someKey`, expect.any(Function))
+    expect(mockFS.mkdir).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`, expect.any(Function))
   })
 
-  it('extracts the archive to `<rootDir>/<appName>/<keyName>`', () => {
+  it('extracts the archive to `<rootDir>/packages/<appName>/<keyName>`', () => {
     const req = createRequest(rootDir)
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    const extractionPath = '/var/www/files/myApp/someKey'
+    const extractionPath = '/var/www/files/packages/myApp/someKey'
     expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
   })
 
@@ -104,7 +104,7 @@ describe('postFile', () => {
       handler(req, res, jest.fn())
 
       const normalizedAppName = 'myAppName------foo'
-      const extractionPath = `/var/www/files/${normalizedAppName}/someKey`
+      const extractionPath = `/var/www/files/packages/${normalizedAppName}/someKey`
       expect(mockTar.extract).toHaveBeenCalledWith(expect.objectContaining({ cwd: extractionPath }))
     })
 
@@ -116,7 +116,7 @@ describe('postFile', () => {
       handler(req, res, jest.fn())
 
       const normalizedKeyName = 'myBranchName------foo'
-      const extractionPath = `/var/www/files/myApp/${normalizedKeyName}`
+      const extractionPath = `/var/www/files/packages/myApp/${normalizedKeyName}`
       expect(mockTar.extract).toHaveBeenCalledWith(expect.objectContaining({ cwd: extractionPath }))
     })
   })

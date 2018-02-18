@@ -4,7 +4,7 @@ export const getFile: (rootDir: string) => RequestHandler = rootDir => (req, res
   const { app, key } = req.cookies
 
   if (app && key) {
-    res.sendFile(`${rootDir}/${app}/${key}${req.path}`)
+    res.sendFile(`${rootDir}/packages/${app}/${key}${req.path}`)
   } else {
     next()
   }
