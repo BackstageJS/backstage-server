@@ -5,7 +5,7 @@ import { setPackageFromQueryParams } from './setPackageFromQueryParams'
 
 export type StorageBackend = express.RequestHandler
 
-export const getApp = (storageBackend: StorageBackend) => {
+export const backstage = (storageBackend: StorageBackend): express.Express => {
   const app: express.Express = express()
   app.use(cookieParser())
   app.use(setPackageFromQueryParams)
