@@ -66,7 +66,7 @@ describe('postFile', () => {
     res.status = status
     handler(req, res, jest.fn())
 
-    const expectedMessage = 'Your deploy can now be viewed at https://backstage.example.com/myApp/someKey'
+    const expectedMessage = 'Your deploy can now be viewed at https://backstage.example.com/?app=myApp&key=someKey'
     expect(send).toHaveBeenCalledWith({ message: expectedMessage })
   })
 

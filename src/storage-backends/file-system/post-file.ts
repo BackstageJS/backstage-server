@@ -12,7 +12,7 @@ export const postFile: (rootDir: string) => RequestHandler = rootDir => (req, re
 
   tar.extract({ cwd: targetDirectory, file: req.file.path })
 
-  const url = `${req.protocol}://${req.get('host')}/${app}/${key}`
+  const url = `${req.protocol}://${req.get('host')}/?app=${app}&key=${key}`
   res.status(201).send({
     message: `Your deploy can now be viewed at ${url}`,
   })
