@@ -76,7 +76,6 @@ describe('postFile', () => {
 
   it('extracts the archive to `<rootDir>/<appName>/<keyName>`', () => {
     const req = createRequest(rootDir)
-    req.file.originalname = 'package.tar.gz'
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
