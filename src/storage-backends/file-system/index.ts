@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as fs from 'fs'
 import * as multer from 'multer'
 
-import { StorageBackend } from '../../app'
+import { StorageBackend } from '../../'
 import { getFile } from './get-file'
 import { postFile } from './post-file'
 

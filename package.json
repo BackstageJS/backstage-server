@@ -5,8 +5,8 @@
   "repository": "git@github.com:jessepinho/backstage-server.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
   "license": "MIT",
-  "main": "dist/app.js",
-  "types": "dist/app.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
