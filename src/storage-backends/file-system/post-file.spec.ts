@@ -82,4 +82,30 @@ describe('postFile', () => {
     const extractionPath = '/var/www/files/myApp/someKey'
     expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
   })
+
+  describe('special characters', () => {
+    it('normalizes the app name', () => {
+      const req = createRequest(rootDir)
+      req.params.app = 'myAppName/../@!foo'
+      req.file.originalname = 'package.tar.gz'
+      const res = httpMocks.createResponse()
+      handler(req, res, jest.fn())
+
+      const normalizedAppName = 'myAppName------foo'
+      const extractionPath = `/var/www/files/${normalizedAppName}/someKey`
+      expect(mockTar.extract).toHaveBeenCalledWith(expect.objectContaining({ cwd: extractionPath }))
+    })
+
+    it('normalizes the key name', () => {
+      const req = createRequest(rootDir)
+      req.params.key = 'myBranchName/../@!foo'
+      req.file.originalname = 'package.tar.gz'
+      const res = httpMocks.createResponse()
+      handler(req, res, jest.fn())
+
+      const normalizedKeyName = 'myBranchName------foo'
+      const extractionPath = `/var/www/files/myApp/${normalizedKeyName}`
+      expect(mockTar.extract).toHaveBeenCalledWith(expect.objectContaining({ cwd: extractionPath }))
+    })
+  })
 })
