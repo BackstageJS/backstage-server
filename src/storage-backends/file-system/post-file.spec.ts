@@ -35,14 +35,14 @@ const createRequest = (rootDir: string): Request => {
 
 describe('postFile', () => {
   let handler: RequestHandler
-  let end: () => void
+  let send: () => void
   let status: (code: number) => Response
   const rootDir = '/var/www/files'
 
   beforeEach(() => {
     handler = postFile(rootDir)
-    end = jest.fn()
-    status = jest.fn(() => ({ end }))
+    send = jest.fn()
+    status = jest.fn(() => ({ send }))
     mockFS.mkdir.mockClear()
     mockFS.rename.mockClear()
     mockFS.rmdir.mockClear()
@@ -56,6 +56,18 @@ describe('postFile', () => {
     handler(req, res, jest.fn())
 
     expect(status).toHaveBeenCalledWith(201)
+  })
+
+  it('sends a message including the deployment link', () => {
+    const req = createRequest(rootDir)
+    req.protocol = 'https'
+    req.get = jest.fn(() => 'backstage.example.com')
+    const res = httpMocks.createResponse()
+    res.status = status
+    handler(req, res, jest.fn())
+
+    const expectedMessage = 'Your deploy can now be viewed at https://backstage.example.com/myApp/someKey'
+    expect(send).toHaveBeenCalledWith({ message: expectedMessage })
   })
 
   it('deletes an existing directory for the key', () => {
