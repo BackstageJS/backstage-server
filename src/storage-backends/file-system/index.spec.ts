@@ -36,10 +36,10 @@ describe('fileSystem', () => {
       expect(mockGetHandler).toHaveBeenCalledWith(req, res, expect.any(Function))
     })
 
-    describe('POST requests', () => {
-      describe('when the path matches /:app/:key', () => {
+    describe('deploy requests', () => {
+      describe('when the path matches /__backstage/deploy/:app/:key', () => {
         it('calls `postFile()`', () => {
-          const req = httpMocks.createRequest({ method: 'POST', path: '/myApp/myKey' })
+          const req = httpMocks.createRequest({ method: 'POST', path: '/__backstage/deploy/myApp/myKey' })
           const res = httpMocks.createResponse()
           const next = jest.fn()
           fileSystem('rootDir')(req, res, next)
@@ -48,7 +48,7 @@ describe('fileSystem', () => {
         })
       })
 
-      describe("when the path doesn't match /:app/:key", () => {
+      describe("when the path doesn't match /__backstage/deploy/:app/:key", () => {
         it('does not call `postFile()`', () => {
           const req = httpMocks.createRequest({ method: 'POST', path: '/foo' })
           const res = httpMocks.createResponse()

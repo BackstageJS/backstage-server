@@ -15,7 +15,7 @@ export const fileSystem: (rootDir: string) => StorageBackend = rootDir => {
   const upload = multer({ dest: `${rootDir}/tmp` })
   const app: express.Express = express()
   app.get('/*', getFile(rootDir))
-  app.post('/:app/:key', upload.single('package'), postFile(rootDir))
+  app.post('/__backstage/deploy/:app/:key', upload.single('package'), postFile(rootDir))
 
   return app
 }

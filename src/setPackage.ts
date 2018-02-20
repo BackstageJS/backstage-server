@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 
-export const setPackageFromQueryParams: RequestHandler = (req, res, next) => {
-  const { app, key } = req.query
+export const setPackage: RequestHandler = (req, res, next) => {
+  const { app, key } = req.params
   if (app && key) {
     res.cookie('app', app)
     res.cookie('key', key)

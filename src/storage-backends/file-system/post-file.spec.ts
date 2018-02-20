@@ -66,8 +66,9 @@ describe('postFile', () => {
     res.status = status
     handler(req, res, jest.fn())
 
-    const expectedMessage = 'Your deploy can now be viewed at https://backstage.example.com/?app=myApp&key=someKey'
-    expect(send).toHaveBeenCalledWith({ message: expectedMessage })
+    expect(send).toHaveBeenCalledWith({
+      message: 'Your deploy can now be viewed at https://backstage.example.com/__backstage/go/myApp/someKey',
+    })
   })
 
   it('deletes an existing directory for the key', () => {
