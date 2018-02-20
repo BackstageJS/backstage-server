@@ -2,8 +2,11 @@ import { Request, Response } from 'express'
 import { RequestHandler } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-const mockFS = { mkdir: jest.fn(), rename: jest.fn(), rmdir: jest.fn() }
+const mockFS = { existsSync: jest.fn(), mkdirSync: jest.fn(), rename: jest.fn() }
 jest.mock('fs', () => mockFS)
+
+const mockRimRaf = { sync: jest.fn() }
+jest.mock('rimraf', () => mockRimRaf)
 
 const mockTar = { extract: jest.fn() }
 jest.mock('tar', () => mockTar)
@@ -43,9 +46,10 @@ describe('postFile', () => {
     handler = postFile(rootDir)
     send = jest.fn()
     status = jest.fn(() => ({ send }))
-    mockFS.mkdir.mockClear()
+    mockFS.existsSync.mockClear()
+    mockFS.mkdirSync.mockClear()
     mockFS.rename.mockClear()
-    mockFS.rmdir.mockClear()
+    mockRimRaf.sync.mockClear()
     mockTar.extract.mockClear()
   })
 
@@ -71,12 +75,22 @@ describe('postFile', () => {
     })
   })
 
-  it('deletes an existing directory for the key', () => {
+  it("creates a directory for the app if it doesn't already exist", () => {
+    mockFS.existsSync = jest.fn(() => false)
     const req = createRequest(rootDir)
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.rmdir).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`, expect.any(Function))
+    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myApp`)
+  })
+
+  it('deletes an existing directory for the key if it already exists', () => {
+    mockFS.existsSync = jest.fn(() => true)
+    const req = createRequest(rootDir)
+    const res = httpMocks.createResponse()
+    handler(req, res, jest.fn())
+
+    expect(mockRimRaf.sync).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`)
   })
 
   it('creates a directory for the key', () => {
@@ -84,7 +98,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.mkdir).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`, expect.any(Function))
+    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`)
   })
 
   it('extracts the archive to `<rootDir>/packages/<appName>/<keyName>`', () => {
