@@ -5,7 +5,11 @@ import { setPackage } from './setPackage'
 
 export type StorageBackend = express.RequestHandler
 
-export const backstage = (storageBackend: StorageBackend): express.Express => {
+export interface ServerConfig {
+  storageBackend: StorageBackend
+}
+
+export const backstage = ({ storageBackend }: ServerConfig): express.Express => {
   const app: express.Express = express()
   app.use(cookieParser())
   app.use('/__backstage/go/:app/:key', setPackage)
