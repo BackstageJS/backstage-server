@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "prepublish": "tsc",
+    "prepublishOnly": "tsc",
     "start": "ts-node src/app.ts",
     "start:watch": "nodemon",
     "test": "jest",
