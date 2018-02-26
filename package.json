@@ -14,7 +14,6 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "prepublishOnly": "tsc",
-    "start": "ts-node src/app.ts",
     "start:watch": "nodemon",
     "test": "jest",
     "test:watch": "jest --watch"

@@ -10,5 +10,3 @@ To work on backstage-server locally:
 
 - Clone this repo.
 - Run `yarn` to install dependencies.
-- Run `yarn start` to start a local Gitbook server.
-- Visit the server at http://localhost:3000.
