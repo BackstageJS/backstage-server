@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
-import { setPackage } from './setPackage'
+import { setPackageFromQueryString } from './setPackageFromQueryString'
 
-describe('setPackage', () => {
+describe('setPackageFromQueryString', () => {
   let res: Response
 
   beforeEach(() => res = httpMocks.createResponse())
@@ -12,7 +12,7 @@ describe('setPackage', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ params: {} })
       const next = jest.fn()
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -22,7 +22,7 @@ describe('setPackage', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ params: { app: 'foo' } })
       const next = jest.fn()
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -32,7 +32,7 @@ describe('setPackage', () => {
     it('calls `next()`', () => {
       const req = httpMocks.createRequest({ params: { key: 'foo' } })
       const next = jest.fn()
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -50,23 +50,23 @@ describe('setPackage', () => {
     })
 
     it('does not call `next()`', () => {
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
       expect(next).not.toHaveBeenCalled()
     })
 
     it('sets the `app` cookie', () => {
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
       expect(res.cookie).toHaveBeenCalledWith('app', 'appName')
     })
 
     it('sets the `key` cookie', () => {
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
       expect(res.cookie).toHaveBeenCalledWith('key', 'keyName')
     })
 
     it('redirects the user to the requested pathh', () => {
       req.path = '/my/file'
-      setPackage(req, res, next)
+      setPackageFromQueryString(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/my/file')
     })
   })

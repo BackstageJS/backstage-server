@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 
-export const setPackage: RequestHandler = (req, res, next) => {
+export const setPackageFromQueryString: RequestHandler = (req, res, next) => {
   const { app, key } = req.params
   if (app && key) {
     res.cookie('app', app)
