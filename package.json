@@ -1,6 +1,6 @@
 {
   "name": "backstage-server",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Simple hosting for multiple versions of your static sites.",
   "repository": "git@github.com:jessepinho/backstage-server.git",
   "author": "Jesse Pinho <jesse@jessepinho.com>",
