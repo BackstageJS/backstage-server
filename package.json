@@ -13,6 +13,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "lint": "tslint --project .",
     "prepublishOnly": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"

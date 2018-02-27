@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jessepinho/backstage-server.svg?branch=master)](https://travis-ci.org/jessepinho/backstage-server)
+
 # backstage-server
 
 backstage-server is the server component to the suite of Backstage tools. Documentation about its usage can be found at [backstage.js.org](https://backstage.js.org/).
