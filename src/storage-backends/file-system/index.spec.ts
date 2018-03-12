@@ -31,32 +31,19 @@ describe('fileSystem', () => {
       const req = httpMocks.createRequest({ method: 'GET', path: '/filename.txt' })
       const res = httpMocks.createResponse()
       const next = jest.fn()
-      fileSystem('rootDir')(req, res, next)
+      fileSystem('rootDir').get(req, res, next)
 
       expect(mockGetHandler).toHaveBeenCalledWith(req, res, expect.any(Function))
     })
 
     describe('deploy requests', () => {
-      describe('when the path matches /__backstage/deploy/:app/:key', () => {
-        it('calls `postFile()`', () => {
-          const req = httpMocks.createRequest({ method: 'POST', path: '/__backstage/deploy/myApp/myKey' })
-          const res = httpMocks.createResponse()
-          const next = jest.fn()
-          fileSystem('rootDir')(req, res, next)
+      it('calls `postFile()`', () => {
+        const req = httpMocks.createRequest({ method: 'POST', path: '/__backstage/deploy/myApp/myKey' })
+        const res = httpMocks.createResponse()
+        const next = jest.fn()
+        fileSystem('rootDir').deploy(req, res, next)
 
-          expect(mockPostHandler).toHaveBeenCalled()
-        })
-      })
-
-      describe("when the path doesn't match /__backstage/deploy/:app/:key", () => {
-        it('does not call `postFile()`', () => {
-          const req = httpMocks.createRequest({ method: 'POST', path: '/foo' })
-          const res = httpMocks.createResponse()
-          const next = jest.fn()
-          fileSystem('rootDir')(req, res, next)
-
-          expect(mockPostHandler).not.toHaveBeenCalled()
-        })
+        expect(mockPostHandler).toHaveBeenCalled()
       })
     })
   })

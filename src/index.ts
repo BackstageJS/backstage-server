@@ -15,10 +15,25 @@ export const backstage = ({ packageResolver, storageBackend }: ServerConfig): ex
     app.use(packageResolver.redirectToPackage)
   }
 
-  app.use(req => {
-    (req as RequestWithPackageIdentifier).packageIdentifier = packageResolver.getPackageIdentifierFromRequest(req)
-  })
+  app.get('/*',
+    (req, _, next) => {
+      (req as RequestWithPackageIdentifier).packageIdentifier = packageResolver.getPackageIdentifierFromRequest(req)
+      next()
+    },
+    storageBackend.get,
+  )
 
-  app.use(storageBackend)
+  app.post(
+    '/__backstage/deploy/:app/:key',
+    (req, _, next) => {
+      (req as RequestWithPackageIdentifier).packageIdentifier = { app: req.params.app, key: req.params.key }
+      next()
+    },
+    storageBackend.deploy,
+    (req, res) => {
+      const url = packageResolver.getPackageURL(req, { app: req.params.app, key: req.params.key })
+      res.send({ message: `Your deploy can now be viewed at ${url}` })
+    },
+  )
   return app
 }

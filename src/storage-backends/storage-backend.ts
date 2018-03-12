@@ -1,3 +1,6 @@
 import { RequestHandler } from 'express'
 
-export type StorageBackend = RequestHandler
+export interface StorageBackend {
+  get: RequestHandler
+  deploy: RequestHandler
+}

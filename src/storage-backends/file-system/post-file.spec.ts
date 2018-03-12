@@ -64,19 +64,6 @@ describe('postFile', () => {
     expect(status).toHaveBeenCalledWith(201)
   })
 
-  it('sends a message including the deployment link', () => {
-    const req = createRequest(rootDir)
-    req.protocol = 'https'
-    req.get = jest.fn(() => 'backstage.example.com')
-    const res = httpMocks.createResponse()
-    res.status = status
-    handler(req, res, jest.fn())
-
-    expect(send).toHaveBeenCalledWith({
-      message: 'Your deploy can now be viewed at https://backstage.example.com/__backstage/go/myApp/someKey',
-    })
-  })
-
   it("creates a directory for the app if it doesn't already exist", () => {
     mockFS.existsSync = jest.fn(() => false)
     const req = createRequest(rootDir)
@@ -136,5 +123,14 @@ describe('postFile', () => {
       const extractionPath = `/var/www/files/packages/myApp/${normalizedKeyName}`
       expect(mockTar.extract).toHaveBeenCalledWith(expect.objectContaining({ cwd: extractionPath }))
     })
+  })
+
+  it('calls `next()`', () => {
+    const req = createRequest(rootDir)
+    const res = httpMocks.createResponse()
+    const next = jest.fn()
+    handler(req, res, next)
+
+    expect(next).toHaveBeenCalled()
   })
 })
