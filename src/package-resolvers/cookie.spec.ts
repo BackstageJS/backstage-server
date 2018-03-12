@@ -35,12 +35,12 @@ describe('cookie package resolver', () => {
   })
 
   describe('redirectToPackage', () => {
-    const req: any = httpMocks.createRequest()
+    const req = httpMocks.createRequest()
     const res = httpMocks.createResponse()
     let next: jest.Mock
 
     beforeEach(() => {
-      req.packageIdentifier = { app: 'myApp', key: 'someKey' }
+      req.params = { app: 'myApp', key: 'someKey' }
       res.cookie = jest.fn()
       next = jest.fn()
     })
