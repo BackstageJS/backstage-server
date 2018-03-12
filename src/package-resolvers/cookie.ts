@@ -27,12 +27,10 @@ export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = 
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  if (req.packageIdentifier) {
-    const { app, key } = req.packageIdentifier
-    res.cookie('app', app)
-    res.cookie('key', key)
-    res.redirect('/')
-  }
+  const { app, key } = req.packageIdentifier
+  res.cookie('app', app)
+  res.cookie('key', key)
+  res.redirect('/')
 }
 
 const redirectToPackage = express()

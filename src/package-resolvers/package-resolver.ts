@@ -6,7 +6,7 @@ export interface PackageIdentifier {
 }
 
 export interface RequestWithPackageIdentifier extends Request {
-  packageIdentifier?: PackageIdentifier
+  packageIdentifier: PackageIdentifier
 }
 
 export interface RequestHandlerWithPackageIdentifier extends RequestHandler {
