@@ -4,7 +4,7 @@ import { cookie, redirectToPackageMiddleware } from './cookie'
 describe('cookie package resolver', () => {
   describe('getPackageIdentifierFromRequest', () => {
     it('returns the app and key from cookies', () => {
-      const req = httpMocks.createRequest({ cookies: { app: 'myApp', key: 'someKey' } })
+      const req = httpMocks.createRequest({ cookies: { __backstageApp: 'myApp', __backstageKey: 'someKey' } })
       const expected = { app: 'myApp', key: 'someKey' }
       const actual = cookie.getPackageIdentifierFromRequest(req)
 
@@ -12,13 +12,13 @@ describe('cookie package resolver', () => {
     })
 
     it('throws if the app cookie is not set', () => {
-      const req = httpMocks.createRequest({ cookies: { key: 'someKey' } })
-      expect(() => cookie.getPackageIdentifierFromRequest(req)).toThrowError('The app cookie is required')
+      const req = httpMocks.createRequest({ cookies: { __backstageKey: 'someKey' } })
+      expect(() => cookie.getPackageIdentifierFromRequest(req)).toThrowError('The __backstageApp cookie is required')
     })
 
     it('throws if the key cookie is not set', () => {
-      const req = httpMocks.createRequest({ cookies: { app: 'myApp' } })
-      expect(() => cookie.getPackageIdentifierFromRequest(req)).toThrowError('The key cookie is required')
+      const req = httpMocks.createRequest({ cookies: { __backstageApp: 'myApp' } })
+      expect(() => cookie.getPackageIdentifierFromRequest(req)).toThrowError('The __backstageKey cookie is required')
     })
   })
 
@@ -35,12 +35,12 @@ describe('cookie package resolver', () => {
 
     it('sets the app cookie', () => {
       redirectToPackageMiddleware(req, res, next)
-      expect(res.cookie).toHaveBeenCalledWith('app', 'myApp')
+      expect(res.cookie).toHaveBeenCalledWith('__backstageApp', 'myApp')
     })
 
     it('sets the key cookie', () => {
       redirectToPackageMiddleware(req, res, next)
-      expect(res.cookie).toHaveBeenCalledWith('key', 'someKey')
+      expect(res.cookie).toHaveBeenCalledWith('__backstageKey', 'someKey')
     })
 
     it('redirects to /', () => {

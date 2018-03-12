@@ -8,23 +8,23 @@ import {
 } from './package-resolver'
 
 const getPackageIdentifierFromRequest = (req: express.Request): PackageIdentifier => {
-  const { app, key } = req.cookies
+  const { __backstageApp, __backstageKey } = req.cookies
 
-  if (!app) {
-    throw new Error('The app cookie is required')
+  if (!__backstageApp) {
+    throw new Error('The __backstageApp cookie is required')
   }
 
-  if (!key) {
-    throw new Error('The key cookie is required')
+  if (!__backstageKey) {
+    throw new Error('The __backstageKey cookie is required')
   }
 
-  return { app, key }
+  return { app: __backstageApp, key: __backstageKey }
 }
 
 export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = (req, res) => {
   const { app, key } = req.packageIdentifier
-  res.cookie('app', app)
-  res.cookie('key', key)
+  res.cookie('__backstageApp', app)
+  res.cookie('__backstageKey', key)
   res.redirect('/')
 }
 
