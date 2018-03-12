@@ -14,6 +14,6 @@ export interface RequestHandlerWithPackageIdentifier extends RequestHandler {
 }
 
 export interface PackageResolver {
-  redirectToPackage: RequestHandler
+  redirectToPackage?: RequestHandler
   getPackageIdentifierFromRequest(req: Request): PackageIdentifier
 }

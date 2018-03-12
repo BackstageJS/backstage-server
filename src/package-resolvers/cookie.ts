@@ -22,7 +22,7 @@ const getPackageIdentifierFromRequest = (req: express.Request): PackageIdentifie
 }
 
 export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = (req, res) => {
-  const { app, key } = req.packageIdentifier
+  const { app, key } = req.params
   res.cookie('__backstageApp', app)
   res.cookie('__backstageKey', key)
   res.redirect('/')
@@ -30,6 +30,6 @@ export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = 
 
 const redirectToPackage = express()
 redirectToPackage.use(cookieParser())
-redirectToPackage.use(redirectToPackageMiddleware)
+redirectToPackage.get('/__backstage/go/:app/:key', redirectToPackageMiddleware)
 
 export const cookie: PackageResolver = { getPackageIdentifierFromRequest, redirectToPackage }
