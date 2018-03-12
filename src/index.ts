@@ -1,18 +1,24 @@
-import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
-
-import { setPackageFromQueryString } from './setPackageFromQueryString'
+import { PackageResolver, RequestWithPackageIdentifier } from './package-resolvers/package-resolver'
 
 export type StorageBackend = express.RequestHandler
 
 export interface ServerConfig {
+  packageResolver: PackageResolver
   storageBackend: StorageBackend
 }
 
-export const backstage = ({ storageBackend }: ServerConfig): express.Express => {
+export const backstage = ({ packageResolver, storageBackend }: ServerConfig): express.Express => {
   const app: express.Express = express()
-  app.use(cookieParser())
-  app.use('/__backstage/go/:app/:key', setPackageFromQueryString)
+
+  if (packageResolver.redirectToPackage) {
+    app.use(packageResolver.redirectToPackage)
+  }
+
+  app.use(req => {
+    (req as RequestWithPackageIdentifier).packageIdentifier = packageResolver.getPackageIdentifierFromRequest(req)
+  })
+
   app.use(storageBackend)
   return app
 }
