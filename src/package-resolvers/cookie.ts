@@ -5,7 +5,6 @@ import {
   PackageIdentifier,
   PackageResolver,
   RequestHandlerWithPackageIdentifier,
-  RequestWithPackageIdentifier,
 } from './package-resolver'
 
 const getPackageIdentifierFromRequest = (req: express.Request): PackageIdentifier => {
@@ -22,11 +21,7 @@ const getPackageIdentifierFromRequest = (req: express.Request): PackageIdentifie
   return { app, key }
 }
 
-export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = (
-  req: RequestWithPackageIdentifier,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
+export const redirectToPackageMiddleware: RequestHandlerWithPackageIdentifier = (req, res) => {
   const { app, key } = req.packageIdentifier
   res.cookie('app', app)
   res.cookie('key', key)
