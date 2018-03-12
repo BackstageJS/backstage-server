@@ -1,5 +1,5 @@
 import * as httpMocks from 'node-mocks-http'
-import { cookie, redirectToPackageMiddleware } from './cookie'
+import { cookie, redirectToPackageMiddleware } from './index'
 
 describe('cookie package resolver', () => {
   describe('getPackageIdentifierFromRequest', () => {

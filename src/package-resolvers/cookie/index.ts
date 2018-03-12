@@ -5,7 +5,7 @@ import {
   PackageIdentifier,
   PackageResolver,
   RequestHandlerWithPackageIdentifier,
-} from './package-resolver'
+} from '../package-resolver'
 
 const getPackageIdentifierFromRequest = (req: express.Request): PackageIdentifier => {
   const { __backstageApp, __backstageKey } = req.cookies
