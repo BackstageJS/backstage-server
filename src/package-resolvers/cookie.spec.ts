@@ -22,6 +22,18 @@ describe('cookie package resolver', () => {
     })
   })
 
+  describe('getPackageURL', () => {
+    it('returns the correct URL', () => {
+      const req = httpMocks.createRequest()
+      req.protocol = 'https'
+      req.get = jest.fn(() => 'backstage.example.com')
+      const packageIdentifier = { app: 'myApp', key: 'someKey' }
+
+      expect(cookie.getPackageURL(req, packageIdentifier))
+        .toBe('https://backstage.example.com/__backstage/go/myApp/someKey')
+    })
+  })
+
   describe('redirectToPackage', () => {
     const req: any = httpMocks.createRequest()
     const res = httpMocks.createResponse()
