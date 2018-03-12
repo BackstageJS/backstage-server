@@ -1,11 +1,17 @@
-import { RequestHandler } from 'express'
-import { existsSync, mkdirSync, rename, rmdirSync } from 'fs'
+import { Response } from 'express'
+import { existsSync, mkdirSync } from 'fs'
 import { sync as rimrafSync } from 'rimraf'
 import * as tar from 'tar'
 
-export const postFile: (rootDir: string) => RequestHandler = rootDir => (req, res) => {
-  const app = req.params.app.replace(/\W/g, '-')
-  const key = req.params.key.replace(/\W/g, '-')
+import {
+  RequestHandlerWithPackageIdentifier,
+  RequestWithPackageIdentifier,
+} from '../../package-resolvers/package-resolver'
+
+export type PostFile = (rootDir: string) => RequestHandlerWithPackageIdentifier
+export const postFile: PostFile = rootDir => (req: RequestWithPackageIdentifier, res: Response) => {
+  const app = req.packageIdentifier.app.replace(/\W/g, '-')
+  const key = req.packageIdentifier.key.replace(/\W/g, '-')
 
   const appDirectory = `${rootDir}/packages/${app}`
   if (!existsSync(appDirectory)) {

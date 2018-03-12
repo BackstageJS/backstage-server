@@ -11,16 +11,17 @@ jest.mock('rimraf', () => mockRimRaf)
 const mockTar = { extract: jest.fn() }
 jest.mock('tar', () => mockTar)
 
+import { RequestWithPackageIdentifier } from '../../package-resolvers/package-resolver'
 import { postFile } from './post-file'
 
-const createRequest = (rootDir: string): Request => {
+const createRequest = (rootDir: string): RequestWithPackageIdentifier => {
   const app = 'myApp'
   const key = 'someKey'
   const destination = `${rootDir}/tmp`
   const filename = 'a1b2c3'
   const path = destination + '/' + filename
   const originalname = 'myFileName.txt'
-  const req = httpMocks.createRequest({ params: { app, key } })
+  const req: any = httpMocks.createRequest()
   req.file = {
     buffer: null,
     destination,
@@ -32,6 +33,7 @@ const createRequest = (rootDir: string): Request => {
     path,
     size: 1024,
   }
+  req.packageIdentifier = { app, key }
 
   return req
 }
@@ -113,7 +115,7 @@ describe('postFile', () => {
   describe('special characters', () => {
     it('normalizes the app name', () => {
       const req = createRequest(rootDir)
-      req.params.app = 'myAppName/../@!foo'
+      req.packageIdentifier.app = 'myAppName/../@!foo'
       req.file.originalname = 'package.tar.gz'
       const res = httpMocks.createResponse()
       handler(req, res, jest.fn())
@@ -125,7 +127,7 @@ describe('postFile', () => {
 
     it('normalizes the key name', () => {
       const req = createRequest(rootDir)
-      req.params.key = 'myBranchName/../@!foo'
+      req.packageIdentifier.key = 'myBranchName/../@!foo'
       req.file.originalname = 'package.tar.gz'
       const res = httpMocks.createResponse()
       handler(req, res, jest.fn())
