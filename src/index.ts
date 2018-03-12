@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { PackageResolver, RequestWithPackageIdentifier } from './package-resolvers/package-resolver'
 
-export type StorageBackend = express.RequestHandler
+import { PackageResolver, RequestWithPackageIdentifier } from './package-resolvers/package-resolver'
+import { StorageBackend } from './storage-backends/storage-backend'
 
 export interface ServerConfig {
   packageResolver: PackageResolver
