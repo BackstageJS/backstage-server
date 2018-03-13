@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'fs'
 import { sync as rimrafSync } from 'rimraf'
 import * as tar from 'tar'
 
+import { sanitizeName } from '../../helpers'
 import {
   RequestHandlerWithPackageIdentifier,
   RequestWithPackageIdentifier,
@@ -10,8 +11,8 @@ import {
 
 export type PostFile = (rootDir: string) => RequestHandlerWithPackageIdentifier
 export const postFile: PostFile = rootDir => (req: RequestWithPackageIdentifier, res: Response, next: NextFunction) => {
-  const app = req.packageIdentifier.app.replace(/\W/g, '-')
-  const key = req.packageIdentifier.key.replace(/\W/g, '-')
+  const app = sanitizeName(req.packageIdentifier.app)
+  const key = sanitizeName(req.packageIdentifier.key)
 
   const appDirectory = `${rootDir}/packages/${app}`
   if (!existsSync(appDirectory)) {
