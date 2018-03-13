@@ -12,7 +12,7 @@ const getPackageURL = (req: express.Request, packageIdentifier: PackageIdentifie
   let { app, key } = packageIdentifier
   app = sanitizeName(app)
   key = sanitizeName(key)
-  return `${req.protocol}://${key}.${app}.${req.get('host')}`
+  return `${req.protocol}://${key}.${app}.${req.get('host')}/`
 }
 
 export const subdomain: PackageResolver = { getPackageIdentifierFromRequest, getPackageURL }

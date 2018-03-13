@@ -20,7 +20,7 @@ describe('subdomain package resolver', () => {
       const packageIdentifier = { app: 'myApp', key: 'someKey' }
 
       expect(subdomain.getPackageURL(req, packageIdentifier))
-        .toBe('https://someKey.myApp.backstage.example.com')
+        .toBe('https://someKey.myApp.backstage.example.com/')
     })
   })
 })
