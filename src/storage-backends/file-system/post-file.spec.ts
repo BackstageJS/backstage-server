@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
 import { RequestHandler } from 'express'
+import { Response } from 'express'
 import * as httpMocks from 'node-mocks-http'
 
 const mockFS = { existsSync: jest.fn(), mkdirSync: jest.fn(), rename: jest.fn() }
