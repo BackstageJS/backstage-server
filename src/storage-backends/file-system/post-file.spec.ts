@@ -70,7 +70,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myApp`)
+    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myapp`)
   })
 
   it('deletes an existing directory for the key if it already exists', () => {
@@ -79,7 +79,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockRimRaf.sync).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`)
+    expect(mockRimRaf.sync).toHaveBeenCalledWith(`${rootDir}/packages/myapp/somekey`)
   })
 
   it('creates a directory for the key', () => {
@@ -87,7 +87,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myApp/someKey`)
+    expect(mockFS.mkdirSync).toHaveBeenCalledWith(`${rootDir}/packages/myapp/somekey`)
   })
 
   it('extracts the archive to `<rootDir>/packages/<appName>/<keyName>`', () => {
@@ -95,7 +95,7 @@ describe('postFile', () => {
     const res = httpMocks.createResponse()
     handler(req, res, jest.fn())
 
-    const extractionPath = '/var/www/files/packages/myApp/someKey'
+    const extractionPath = '/var/www/files/packages/myapp/somekey'
     expect(mockTar.extract).toHaveBeenCalledWith({ file: req.file.path, cwd: extractionPath })
   })
 
