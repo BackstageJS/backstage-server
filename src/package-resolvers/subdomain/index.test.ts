@@ -5,8 +5,8 @@ describe('subdomain package resolver', () => {
   describe('getPackageIdentifierFromRequest', () => {
     it('gets the app and key from subdomains', () => {
       const req = httpMocks.createRequest()
-      req.hostname = 'someKey.myApp.backstage.example.com'
-      const expected = { app: 'myApp', key: 'someKey' }
+      req.hostname = 'somekey.myapp.backstage.example.com'
+      const expected = { app: 'myapp', key: 'somekey' }
 
       expect(subdomain.getPackageIdentifierFromRequest(req)).toEqual(expected)
     })
@@ -17,10 +17,10 @@ describe('subdomain package resolver', () => {
       const req = httpMocks.createRequest()
       req.protocol = 'https'
       req.get = jest.fn(() => 'backstage.example.com')
-      const packageIdentifier = { app: 'myApp', key: 'someKey' }
+      const packageIdentifier = { app: 'myapp', key: 'somekey' }
 
       expect(subdomain.getPackageURL(req, packageIdentifier))
-        .toBe('https://someKey.myApp.backstage.example.com/')
+        .toBe('https://somekey.myapp.backstage.example.com/')
     })
   })
 })
